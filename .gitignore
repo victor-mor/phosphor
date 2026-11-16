@@ -1,0 +1,33 @@
+# Editor settings
+/.vscode/
+/.idea/
+
+# Personal agent setup; shared OpenSpec artifacts remain versioned
+/.agents/
+/.opencode/
+/skills-lock.json
+/opencode.json
+/opencode.jsonc
+
+# Build outputs
+/build/
+/build-*/
+/cmake-build-*/
+/dist/
+
+# Runtime logs and caches
+/logs/
+/*.log
+/.cache/
+/.qmlcache/
+*.qmlc
+*.jsc
+
+# Generated test reports
+/coverage/
+/test-results/
+
+# Local Nix/direnv state and build results
+/.direnv/
+/result
+/result-*
