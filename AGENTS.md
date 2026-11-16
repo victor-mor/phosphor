@@ -44,7 +44,8 @@ Write short sentences in plain words.
   propose an amendment instead.
 
 Phases:
-1. Explore/Investigate: clear up doubts. Investigate fixes first (§5). The Explore skill is read-only.
+1. Investigate: before planning, the investigator clears up doubts: bugs, feasibility, anything
+   unclear (§5). Small, clearly bounded work may skip it, with user approval.
 2. Propose: prepare the full package. The user approves it as a whole; approval in chat is enough.
    Never move on to Apply automatically.
 3. Apply: carry out the approved tasks and tick real progress. New evidence can reopen planning.
@@ -57,7 +58,7 @@ Phases:
 | Role | Does | Doesn't |
 | --- | --- | --- |
 | coordinator | talks to the user, delegates to the 4 specialists, tracks approvals | edit, write, mutate anything |
-| investigator | diagnoses through experiments (§5) | deliver fixes |
+| investigator | investigates through experiments: bugs, feasibility, doubts (§5) | deliver fixes or product work |
 | planner | writes and updates OpenSpec plans; creates the change branch; Sync/Archive when approved; updates MEMORY.md when the coordinator asks | implement |
 | implementer | approved tasks and direct work, tests and docs; proposes commits and makes them once approved | change plans or contracts |
 | reviewer | independently reviews the other three, including their corrections | edit, tick tasks, approve |
@@ -82,24 +83,25 @@ Review findings:
   (pending / corrected / discarded + reason / not verified).
 - If there are no findings, say so. Never present a suspicion as a fact.
 - Corrections within scope need no new approval, but they are reported.
-  New diagnosis → investigator. Plan changes → planner. New scope → user.
+  New doubts or diagnosis → investigator. Plan changes → planner. New scope → user.
 - QML reviews over 1,500 lines: the reviewer gives lint results and shards to the coordinator.
   The coordinator launches up to 6 sibling reviewers. One reviewer merges the results.
   Keep all 7 domains and every finding.
 
 ## 5. Investigation
-- Before proposing a fix: compare expected and observed behavior, read the contracts, code,
-  tests and history, and reproduce the problem if possible.
-- Test the competing causes. Keep facts, assumptions and unknowns apart.
-  If the result is inconclusive, keep going or report that you are blocked. Never invent a cause.
+- Before planning: read the contracts, code, tests and history. For bugs, compare expected
+  and observed behavior and reproduce the problem if possible.
+- Test competing causes or options. Keep facts, assumptions and unknowns apart.
+  If the result is inconclusive, keep going or report that you are blocked.
+  Never invent a cause or a result.
 - Agree on tools, paths and effects first. Within that agreement, work freely without asking
-  for each action. Use systematic-debugging.
+  for each action. Use systematic-debugging for bugs.
 - Experiments go only in `exp/<name>/`, one folder per experiment (ignored by Git).
   Never edit product files to experiment; copy what you need into the folder.
-- An experiment is evidence, not an approved fix. Clean only your own folder and report what
+- An experiment is evidence, not approved work. Clean only your own folder and report what
   remains. Keeping anything requires approved planning. Summarize in the proposal or design;
   no diaries.
-- The reviewer checks experiments and diagnosis; plans (coherence, testable tasks); and code
+- The reviewer checks experiments and findings; plans (coherence, testable tasks); and code
   (scope, correctness, tests, docs).
 
 ## 6. Git
@@ -119,8 +121,9 @@ Review findings:
 - Reviewer reports stay in the chat unless a writer is authorized.
 - docs/development.md holds only verified product commands.
 - MEMORY.md has at most ~50 lines: goal, branch, scope, permissions, progress, decisions,
-  blockers and next step. No diary, no secrets. The coordinator asks the planner to update it
-  whenever the state changes; no extra approval is needed.
+  blockers and next step. No diary, no secrets.
+  The coordinator asks the planner to update it after every state change (decision, approval,
+  milestone, blocker) and before a session ends. No extra approval is needed.
 
 ## 8. Change types
 Pick one per change: feature, fix, refactor, perf (with measurements), test, docs, tooling, chore.

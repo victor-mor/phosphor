@@ -18,8 +18,9 @@ OpenSpec 2.0.0 is installed and initialized for OpenCode. `openspec/specs/` hold
 capability contracts and `openspec/changes/` holds active changes and their archive.
 No capability specifications or changes exist yet.
 
-All changes use the packaged `spec-driven` schema. Fixes require thorough investigation
-before proposal; unchanged contracts use `skip_specs: true`, not invented deltas.
+All changes use the packaged `spec-driven` schema. Each change starts with an investigation.
+Small, clearly bounded work may skip it, with user approval.
+Unchanged contracts use `skip_specs: true`, not invented deltas.
 See `AGENTS.md` for agent procedures/types and `CONTRIBUTING.md` for shared conventions.
 Issues are optional tracking references.
 
