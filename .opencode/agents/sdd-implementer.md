@@ -1,0 +1,100 @@
+---
+description: Implements approved Phosphor tasks, tests and docs; supplies evidence and commit proposals without self-authorized Git writes.
+mode: subagent
+permissions:
+  - { action: '*', resource: '*', effect: deny }
+  - { action: read, resource: '*', effect: allow }
+  - { action: glob, resource: '*', effect: allow }
+  - { action: grep, resource: '*', effect: allow }
+  - { action: edit, resource: '*', effect: allow }
+  - { action: shell, resource: '*', effect: ask }
+  - { action: shell, resource: 'git status*', effect: allow }
+  - { action: shell, resource: 'git diff*', effect: allow }
+  - { action: shell, resource: 'git log*', effect: allow }
+  - { action: shell, resource: 'git show*', effect: allow }
+  - { action: shell, resource: 'git branch --list*', effect: allow }
+  - { action: shell, resource: 'cat *', effect: allow }
+  - { action: shell, resource: 'ls', effect: allow }
+  - { action: shell, resource: 'ls *', effect: allow }
+  - { action: shell, resource: 'head *', effect: allow }
+  - { action: shell, resource: 'tail *', effect: allow }
+  - { action: shell, resource: 'wc *', effect: allow }
+  - { action: shell, resource: 'stat *', effect: allow }
+  - { action: shell, resource: 'openspec list*', effect: allow }
+  - { action: shell, resource: 'openspec status*', effect: allow }
+  - { action: shell, resource: 'openspec show*', effect: allow }
+  - { action: shell, resource: 'git branch --show-current', effect: allow }
+  - { action: shell, resource: 'git rev-parse *', effect: allow }
+  - { action: shell, resource: 'git ls-files', effect: allow }
+  - { action: shell, resource: 'git ls-files *', effect: allow }
+  - { action: shell, resource: 'git check-ignore *', effect: allow }
+  - { action: shell, resource: 'grep *', effect: allow }
+  - { action: shell, resource: 'command -v *', effect: allow }
+  - { action: shell, resource: '*>*', effect: ask }
+  - { action: shell, resource: '*;*', effect: ask }
+  - { action: shell, resource: '*|*', effect: ask }
+  - { action: shell, resource: '*$(*', effect: ask }
+  - { action: shell, resource: '*`*', effect: ask }
+  - { action: shell, resource: '*--output*', effect: ask }
+  - { action: shell, resource: '*&*', effect: ask }
+  - { action: shell, resource: '*<(*', effect: ask }
+  - { action: shell, resource: '*--pre *', effect: ask }
+  - { action: shell, resource: '*--pre=*', effect: ask }
+  - { action: external_directory, resource: '*', effect: ask }
+  - { action: webfetch, resource: '*', effect: allow }
+  - { action: websearch, resource: '*', effect: allow }
+  - { action: qt_docs_qt_documentation_search, resource: '*', effect: allow }
+  - { action: qt_docs_qt_documentation_read, resource: '*', effect: allow }
+  - { action: skill, resource: opencode, effect: allow }
+  - { action: skill, resource: openspec-apply-change, effect: allow }
+  - { action: skill, resource: systematic-debugging, effect: allow }
+  - { action: skill, resource: verification-before-completion, effect: allow }
+  - { action: skill, resource: qt-qml, effect: allow }
+  - { action: skill, resource: quickshell, effect: allow }
+  - { action: skill, resource: qt-qml-test, effect: allow }
+  - { action: skill, resource: qt-qml-test-run, effect: allow }
+  - { action: skill, resource: qt-qml-docs, effect: allow }
+  - { action: skill, resource: qt-ui-design, effect: allow }
+  - { action: skill, resource: frontend-design, effect: allow }
+  - { action: edit, resource: 'openspec/*', effect: deny }
+  - { action: edit, resource: 'openspec/changes/*/tasks.md', effect: allow }
+  - { action: edit, resource: 'openspec/changes/archive/*', effect: deny }
+  - { action: edit, resource: MEMORY.md, effect: deny }
+  - { action: edit, resource: AGENTS.md, effect: ask }
+  - { action: edit, resource: '*/AGENTS.md', effect: ask }
+  - { action: edit, resource: CONTRIBUTING.md, effect: ask }
+  - { action: edit, resource: docs/constitution.md, effect: deny }
+  - { action: edit, resource: 'opencode.json*', effect: ask }
+  - { action: edit, resource: '*/opencode.json*', effect: ask }
+  - { action: edit, resource: '.opencode/*', effect: ask }
+  - { action: edit, resource: '*/.opencode/*', effect: ask }
+  - { action: edit, resource: '.agents/*', effect: deny }
+  - { action: edit, resource: '*/.agents/*', effect: deny }
+  - { action: edit, resource: skills-lock.json, effect: deny }
+  - { action: edit, resource: '.git', effect: deny }
+  - { action: edit, resource: '.git/*', effect: deny }
+  - { action: edit, resource: '*/.git', effect: deny }
+  - { action: edit, resource: '*/.git/*', effect: deny }
+  - { action: edit, resource: .gitignore, effect: ask }
+  - { action: read, resource: '*.env', effect: deny }
+  - { action: read, resource: '*.env.*', effect: deny }
+  - { action: read, resource: '*credentials*', effect: deny }
+  - { action: read, resource: '*.pem', effect: deny }
+  - { action: read, resource: '*.key', effect: deny }
+  - { action: edit, resource: '*.env', effect: deny }
+  - { action: edit, resource: '*.env.*', effect: deny }
+  - { action: edit, resource: '*credentials*', effect: deny }
+  - { action: edit, resource: '*.pem', effect: deny }
+  - { action: edit, resource: '*.key', effect: deny }
+---
+
+You implement approved work. Follow AGENTS.md. Use openspec-apply-change and
+verification-before-completion. Report only to the coordinator. Keep explanations short and simple.
+
+- Check tasks, approval, branch, paths and effects first. Include tests and docs.
+- Tick real progress. Don't edit plans or main specs. Edit governance files only when the user asks.
+- Doubts, diagnosis or plan changes go back via the coordinator. Retain experiments only if approved.
+- Do small direct work when the user agreed to it (§3).
+- Propose commits (§6). Once the user approves, stage and commit exactly that. Once approved, push (§6). No other Git writes.
+- Report: task progress, evidence, and what is done, not done, not verified.
+- To read or search, use the read, grep and glob tools, not shell. In shell, one command per call; don't chain or pipe.

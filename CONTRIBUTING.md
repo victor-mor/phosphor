@@ -20,9 +20,9 @@ Conventions for all contributors, with or without AI. Agent procedures: `AGENTS.
   trivial edits do not require a change.
 - Version `openspec/` configuration, specs, change artifacts and archives alongside
   the related implementation; these are shared project records, not disposable outputs.
-- Choose any assistant or work manually. Set up the OpenSpec integration for your
-  chosen tool locally; `.agents/`, `.opencode/`, `opencode.json(c)` and `skills-lock.json`
-  are personal setup excluded from Git. Shared agent instructions remain in `AGENTS.md`.
+- Use any assistant or work manually. `.opencode/` and `opencode.json` are shared setup.
+  `.agents/`, `opencode.jsonc` and `skills-lock.json` stay personal and ignored.
+  Never commit secrets. Shared agent instructions remain in `AGENTS.md`.
 
 ## Git conventions
 ### Commits
