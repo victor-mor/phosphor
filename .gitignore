@@ -2,11 +2,9 @@
 /.vscode/
 /.idea/
 
-# Personal agent setup; shared OpenSpec artifacts remain versioned
+# Personal agent setup; shared OpenCode and OpenSpec files stay versioned
 /.agents/
-/.opencode/
 /skills-lock.json
-/opencode.json
 /opencode.jsonc
 
 # Build outputs
