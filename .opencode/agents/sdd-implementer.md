@@ -64,8 +64,8 @@ permissions:
   - { action: edit, resource: '*/AGENTS.md', effect: ask }
   - { action: edit, resource: CONTRIBUTING.md, effect: ask }
   - { action: edit, resource: docs/constitution.md, effect: deny }
-  - { action: edit, resource: 'opencode.json*', effect: deny }
-  - { action: edit, resource: '*/opencode.json*', effect: deny }
+  - { action: edit, resource: 'opencode.json*', effect: ask }
+  - { action: edit, resource: '*/opencode.json*', effect: ask }
   - { action: edit, resource: '.opencode/*', effect: ask }
   - { action: edit, resource: '*/.opencode/*', effect: ask }
   - { action: edit, resource: '.agents/*', effect: deny }
