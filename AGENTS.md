@@ -63,11 +63,12 @@ Phases:
 
 | Role | Does | Doesn't |
 | --- | --- | --- |
-| coordinator | talks to the user, delegates to the 4 specialists, tracks approvals | edit files or write anything, except approved GitHub writes |
-| investigator | investigates through experiments: bugs, feasibility, doubts (§5) | deliver fixes or product work |
-| planner | writes and updates OpenSpec plans; creates the change branch; Sync/Archive when approved; updates MEMORY.md when the coordinator asks | implement |
+| coordinator | talks to the user, delegates to the 5 specialists, tracks approvals | edit files or write anything, except approved GitHub writes |
+| investigator | investigates and does experiments: bugs, feasibility, doubts (§5) | deliver fixes or product work |
+| planner | writes OpenSpec plans; creates the change branch; updates MEMORY.md when the coordinator asks | implement |
+| updater | updates OpenSpec plans; Sync/Archive when approved; updates MEMORY.md when the coordinator asks | implement |
 | implementer | approved tasks and direct work, tests and docs; proposes commits and makes them once approved | change plans or contracts |
-| reviewer | independently reviews the other three, including their corrections | edit, tick tasks, approve |
+| reviewer | independently reviews the implementer | edit, tick tasks, approve |
 
 Handoffs:
 - Only the coordinator delegates or talks to the user.
@@ -84,32 +85,32 @@ Talking to the user:
 - Never invent progress.
 
 Review findings:
+- The reviewer checks implementation (i.e. code): its scope, correctness, tests and docs.
 - Every finding reaches the user, including minor, already fixed or discarded ones.
 - For each one, give: an id, the location, the evidence, the severity, the decision and the status
   (pending / corrected / discarded + reason / not verified).
 - If there are no findings, say so. Never present a suspicion as a fact.
 - Corrections within scope need no new approval, but they are reported.
-  New doubts or diagnosis → investigator. Plan changes → planner. New scope → user.
+  New doubts or diagnosis → investigator. Plan changes → updater. New scope → user.
 - QML reviews over 1,500 lines: the reviewer gives lint results and shards to the coordinator.
   The coordinator launches up to 6 sibling reviewers. One reviewer merges the results.
   Keep all 7 domains and every finding.
 
 ## 5. Investigation
-- Before planning: read the contracts, code, tests and history. For bugs, compare expected
+- Before planning: read the contracts, code, tests, official documentation and history. For bugs, compare expected
   and observed behavior and reproduce the problem if possible.
 - Test competing causes or options. Keep facts, assumptions and unknowns apart.
   If the result is inconclusive, keep going or report that you are blocked.
   Never invent a cause or a result.
 - Agree on tools, paths and effects first. Within that agreement, work freely without asking
   for each action. Use systematic-debugging for bugs.
+- Create an experiment in case an investigation needs deep work, or if it is requested.
 - Experiments go only in `exp/<name>/`, one folder per experiment (ignored by Git).
   Never edit product files to experiment; copy what you need into the folder.
 - An experiment is evidence, not approved work. Clean only your own folder and report what
   remains. Keeping anything requires approved planning. Summarize in the proposal or design;
   no diaries.
 - Experiments solutions must be simple and very easy to understand.
-- The reviewer checks experiments and findings; plans (coherence, testable tasks); and code
-  (scope, correctness, tests, docs).
 
 ## 6. Git
 - Starting a change allows creating or switching to its branch (naming per CONTRIBUTING),

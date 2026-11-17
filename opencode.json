@@ -3,24 +3,33 @@
   "default_agent": "sdd-coordinator",
   "agents": {
     "build": {
-      "permissions": [{ "action": "subagent", "resource": "*", "effect": "deny" }],
-      "model": "claude-agent/haiku"
+      "permissions": [
+        { "action": "subagent", "resource": "*", "effect": "allow" },
+        { "action": "subagent", "resource": "sdd-*", "effect": "deny" }
+      ],
+      "model": "openai/gpt-6-luna"
     },
     "plan": {
-      "permissions": [{ "action": "subagent", "resource": "*", "effect": "deny" }],
-      "model": "openai/gpt-6-luna"
+      "permissions": [
+        { "action": "subagent", "resource": "*", "effect": "allow" },
+        { "action": "subagent", "resource": "sdd-*", "effect": "deny" }
+      ],
+      "model": "claude-agent/sonnet"
     },
     "sdd-coordinator": {
       "model": "claude-agent/haiku"
     },
     "sdd-investigator": {
-      "model": "openai/gpt-6-luna"
+      "model": "openai/gpt-6.1-terra"
     },
     "sdd-planner": {
+      "model": "claude-agent/opus"
+    },
+    "sdd-updater": {
       "model": "openai/gpt-6.1-terra"
     },
     "sdd-implementer": {
-      "model": "claude-agent/sonnet"
+      "model": "openai/gpt-6.1-terra"
     },
     "sdd-reviewer": {
       "model": "claude-agent/sonnet"
