@@ -3,10 +3,27 @@
   "default_agent": "sdd-coordinator",
   "agents": {
     "build": {
-      "permissions": [{ "action": "subagent", "resource": "*", "effect": "deny" }]
+      "permissions": [{ "action": "subagent", "resource": "*", "effect": "deny" }],
+      "model": "claude-agent/haiku"
     },
     "plan": {
-      "permissions": [{ "action": "subagent", "resource": "*", "effect": "deny" }]
+      "permissions": [{ "action": "subagent", "resource": "*", "effect": "deny" }],
+      "model": "openai/gpt-6-luna"
+    },
+    "sdd-coordinator": {
+      "model": "claude-agent/haiku"
+    },
+    "sdd-investigator": {
+      "model": "openai/gpt-6-luna"
+    },
+    "sdd-planner": {
+      "model": "openai/gpt-6.1-terra"
+    },
+    "sdd-implementer": {
+      "model": "claude-agent/sonnet"
+    },
+    "sdd-reviewer": {
+      "model": "claude-agent/sonnet"
     }
   },
   "mcp": {

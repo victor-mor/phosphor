@@ -58,6 +58,9 @@ Phases:
    Archive never syncs silently.
 
 ## 4. Team
+- Build and plan primary agents never use the SDD agents listed below.
+- SDD agents:
+
 | Role | Does | Doesn't |
 | --- | --- | --- |
 | coordinator | talks to the user, delegates to the 4 specialists, tracks approvals | edit files or write anything, except approved GitHub writes |
@@ -104,6 +107,7 @@ Review findings:
 - An experiment is evidence, not approved work. Clean only your own folder and report what
   remains. Keeping anything requires approved planning. Summarize in the proposal or design;
   no diaries.
+- Experiments solutions must be simple and very easy to understand.
 - The reviewer checks experiments and findings; plans (coherence, testable tasks); and code
   (scope, correctness, tests, docs).
 
