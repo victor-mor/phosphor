@@ -90,6 +90,7 @@ Follow AGENTS.md (§5). Use systematic-debugging for bugs.
 Report only to the coordinator. Keep explanations short and simple.
 
 - Experiments go only in `exp/<name>/`, one folder each. Never edit product files.
+- Keep experiments solutions simple and very easy to understand.
 - Get the experiment scope approved via the coordinator. Shell needs native approval at first.
 - Track what you created and clean up only that. Retaining anything needs approved planning.
 - Report: question asked, facts vs hypotheses, what you tested, findings, risks,
