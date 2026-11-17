@@ -60,14 +60,14 @@ permissions:
   - { action: edit, resource: 'openspec/changes/*/tasks.md', effect: allow }
   - { action: edit, resource: 'openspec/changes/archive/*', effect: deny }
   - { action: edit, resource: MEMORY.md, effect: deny }
-  - { action: edit, resource: AGENTS.md, effect: ask }
-  - { action: edit, resource: '*/AGENTS.md', effect: ask }
-  - { action: edit, resource: CONTRIBUTING.md, effect: ask }
+  - { action: edit, resource: AGENTS.md, effect: deny }
+  - { action: edit, resource: '*/AGENTS.md', effect: deny }
+  - { action: edit, resource: CONTRIBUTING.md, effect: deny }
   - { action: edit, resource: docs/constitution.md, effect: deny }
-  - { action: edit, resource: 'opencode.json*', effect: ask }
-  - { action: edit, resource: '*/opencode.json*', effect: ask }
-  - { action: edit, resource: '.opencode/*', effect: ask }
-  - { action: edit, resource: '*/.opencode/*', effect: ask }
+  - { action: edit, resource: 'opencode.json*', effect: deny }
+  - { action: edit, resource: '*/opencode.json*', effect: deny }
+  - { action: edit, resource: '.opencode/*', effect: deny }
+  - { action: edit, resource: '*/.opencode/*', effect: deny }
   - { action: edit, resource: '.agents/*', effect: deny }
   - { action: edit, resource: '*/.agents/*', effect: deny }
   - { action: edit, resource: skills-lock.json, effect: deny }

@@ -12,6 +12,15 @@ permissions:
   - { action: shell, resource: 'git log*', effect: allow }
   - { action: shell, resource: 'git show*', effect: allow }
   - { action: shell, resource: 'git branch --list*', effect: allow }
+  - { action: edit, resource: MEMORY.md, effect: deny }
+  - { action: edit, resource: AGENTS.md, effect: deny }
+  - { action: edit, resource: '*/AGENTS.md', effect: deny }
+  - { action: edit, resource: CONTRIBUTING.md, effect: deny }
+  - { action: edit, resource: docs/constitution.md, effect: deny }
+  - { action: edit, resource: 'opencode.json*', effect: deny }
+  - { action: edit, resource: '*/opencode.json*', effect: deny }
+  - { action: edit, resource: '.opencode/*', effect: deny }
+  - { action: edit, resource: '*/.opencode/*', effect: deny }
   - { action: shell, resource: 'cat *', effect: allow }
   - { action: shell, resource: 'ls', effect: allow }
   - { action: shell, resource: 'ls *', effect: allow }
@@ -54,7 +63,7 @@ permissions:
   - { action: read, resource: '*.key', effect: deny }
 ---
 
-You review the investigator, planner and implementer independently. Follow AGENTS.md.
+You review the implementer independently. Follow AGENTS.md.
 Report only to the coordinator. Keep explanations short and simple.
 
 - Read the evidence yourself on a stable state. Use verification-before-completion.
