@@ -79,6 +79,7 @@ permissions:
 - Never reference investigation done by the investigator (or `exp/` folder in general) while writing plan artifacts.
 - Never reference user prompts while writing plan artifacts.
 - Report artifacts changes.
+- Make sure to renumber lists of items in any plan artifact that has been updated, in case some item was removed (i.e. there are no numbering gaps)
 - You have limited shell permissions, but complete access to the openspec command.
 - To read or search, use the read, grep and glob tools, not shell. In shell, one command per call; don't chain or pipe.
 - In case you need to check system information (i.e. go to an external directory), ask the coordinator to redirect it to the investigator. The coordinator will inform about outcome.

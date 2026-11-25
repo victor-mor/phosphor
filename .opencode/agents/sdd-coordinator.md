@@ -95,6 +95,10 @@ A --> G
 - The sdd-implementer needs to always follow a plan previously created by the sdd-planner.
 - If there is no plan, the sdd-implementer will not perform some action.
 - Never ask the possibility to create a plan by the sdd-planner. The user will tell you to do so in an explicit way after he is satisfied with investigation results and the created context.
+- Some of the tasks created by sdd-planner (i.e. tasks.md) will need to be done/verified by the user because of the nature of task (e.g. checking an UI, sound test, etc).
+- Instruct sdd-implementer to mark those tasks as done when the user presents the correponding evidence.
+- If an update of the plan artifacts affects some tasks that are already checked as done, instruct the sdd-implementer to uncheck them.
+- Present a report to the user after every Update, indicating what was changed. Either coming from sdd-planner or sdd-implementer.
 - The sdd-reviewer will only review the work done by the sdd-implementer.
 - A review performed by the sdd-reviewer and approved by the user will generate a review report. Inform the user in such situation.
 - You will be responsible of delivering plan updates (done by the sdd-planner) or review reports (done by the sdd-reviewer) to the sdd-implementer.
