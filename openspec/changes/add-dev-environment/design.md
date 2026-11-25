@@ -24,7 +24,7 @@ so a container builds them on Ubuntu 26.04.
 Layout:
 - `dev/Containerfile`: image recipe. It holds one pin line per source:
   name, version, URL, commit. Single source of truth.
-- `dev/devcontainer.json`: container config (mounts, environment, image tag, editor extension).
+- `dev/devcontainer.json`: container config (mounts, environment without keys, image tag).
 - `dev/hyprland/hyprland.lua`: nested Hyprland config.
 - `dev/fixture/shell.qml`: minimal Quickshell test window.
 - `dev/scripts/`: `build-image.sh`, `start-dev.sh` (host);
@@ -36,10 +36,11 @@ Reason: the constitution reserves `dev/` for this. The README already plans it.
 There are ten sources: Hyprland, Quickshell, aquamarine, hyprutils, hyprgraphics,
 hyprland-protocols, hyprwire, cpptrace, wayland and wayland-protocols.
 Each has one version and one commit, written in `dev/Containerfile`.
-The build clones each source at its commit (decision 1).
-After checkout it compares `git rev-parse HEAD` with the commit.
+The build clones each source by its version tag (decision 1).
+It resolves the tag to a commit and compares it with the pinned commit in `dev/Containerfile`.
 On mismatch it stops, names that source, and tags no image.
 Hyprland submodules come from the pinned Hyprland commit.
+Reason for the tag: comparing a checked-out commit with itself never fails.
 The base image is Ubuntu 26.04, by tag.
 Reason: today the pins are only written down; nothing checks them.
 
@@ -75,7 +76,8 @@ PipeWire runs on the host as the user.
 `start-session.sh` first checks for a live `Hyprland` or `start-hyprland` process.
 If one is alive, it stops with an error and deletes nothing.
 Then it creates the folder, starts `start-hyprland`, and waits up to 30 s for an instance.
-`start-dev.sh` (host) runs `devcontainer up`, then `start-session.sh`, then opens a shell.
+`start-dev.sh` (host) runs `devcontainer up`, then `start-session.sh`, then `start-fixture.sh`,
+then opens the final shell (D10).
 
 ### D8. Stop uses signals
 `hyprctl dispatch exit` fails with the Lua config, so stop uses signals.
@@ -89,20 +91,29 @@ the fixture title in `hyprctl clients`. Any failure gives a non-zero exit.
 It cannot prove that sound is heard. That is a manual check.
 
 ### D10. Keys
-`start-dev.sh` passes `OPENROUTER_API_KEY` and `GITHUB_PERSONAL_ACCESS_TOKEN`
-from the host environment (decision 2). It warns if one is empty and continues.
+`start-dev.sh` reads both keys from the host keyring with `secret-tool lookup` (decision 2):
+- `OPENROUTER_API_KEY`: `secret-tool lookup service openrouter`
+- `GITHUB_PERSONAL_ACCESS_TOKEN`: `secret-tool lookup service github-mcp`
+Flow: lookups, `devcontainer up`, `start-session.sh`, `start-fixture.sh`,
+then the final shell with `devcontainer exec --remote-env` for each key found.
+The keys are not in `containerEnv` and are not passed to `devcontainer up`.
+Reason: `devcontainer up` prints the full `podman run` command, with `containerEnv` values.
+The keys live only in the script's shell variables (not exported) and in the final shell.
+The script never prints them.
+`start-dev.sh --shell`: same lookups, checks that the container runs, then opens a new shell
+with `devcontainer exec --remote-env`. It starts and changes nothing; if the container is not running, it exits with an error.
+The full start (no option) is the only path that starts the session.
+Any other shell opened later in the container has no keys; start OpenCode from a script's shell.
+If a lookup returns nothing, it warns and continues.
+The lookup names are in the script; they are not secrets.
 The keys are never written to files or the image.
+`secret-tool` is a host requirement (Linux).
+Risk, not tested: values are `devcontainer exec` arguments, visible in the host process list for a moment.
+Risk, not tested: `devcontainer exec` may log them.
 
 ### D11. Build environment
 `build-image.sh` runs `podman build` with `NOTIFY_SOCKET` unset.
 Reason: if set, the build leaves a root-owned `/run/user/<uid>/systemd/notify` in the image.
-
-### D12. The OpenCode editor extension
-`dev/devcontainer.json` lists `sst-dev.opencode` under `customizations.vscode.extensions`.
-It comes from Open VSX, the extension store VSCodium uses (decision 7).
-The extension is not part of the image. The editor installs it when it opens the container.
-Assumption, not verified: the extension calls the `opencode` command inside the container,
-which the image already installs.
 
 ## Risks / Trade-offs
 
@@ -114,6 +125,7 @@ which the image already installs.
   Documented as a known limitation. The stop check watches the host bar.
 - Real audio playback is checked once by hand (decision 6). If not heard, known limitation.
 - Wi-Fi control from the container is not verified.
+- Keys passed as `devcontainer exec` arguments may show in the host process list or logs (D10). Not tested.
 - Hosts other than NixOS 26.05 are not tested.
 - Side effects: Podman image storage (several GB), network downloads during build,
   a running container (`sleep infinity` under `tini`) until the user stops it.

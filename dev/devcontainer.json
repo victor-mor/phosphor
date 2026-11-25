@@ -1,0 +1,22 @@
+{
+  "name": "Phosphor development",
+  "image": "localhost/phosphor-devcontainer",
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "remoteUser": "root",
+  "runArgs": ["--device=/dev/dri/renderD128"],
+  "mounts": [
+    "source=${localEnv:XDG_RUNTIME_DIR}/${localEnv:WAYLAND_DISPLAY},target=/parent-run/${localEnv:WAYLAND_DISPLAY},type=bind",
+    "source=/run/dbus/system_bus_socket,target=/parent-run/system-bus,type=bind",
+    "source=${localEnv:XDG_RUNTIME_DIR}/bus,target=/parent-run/bus,type=bind",
+    "source=${localEnv:XDG_RUNTIME_DIR}/pipewire-0,target=/parent-run/pipewire-0,type=bind",
+    "source=${localEnv:XDG_RUNTIME_DIR}/pulse/native,target=/parent-run/pulse/native,type=bind"
+  ],
+  "containerEnv": {
+    "WAYLAND_DISPLAY": "${localEnv:WAYLAND_DISPLAY}",
+    "DBUS_SESSION_BUS_ADDRESS": "unix:path=/parent-run/bus",
+    "DBUS_SYSTEM_BUS_ADDRESS": "unix:path=/parent-run/system-bus",
+    "PULSE_SERVER": "unix:/parent-run/pulse/native",
+    "PIPEWIRE_RUNTIME_DIR": "/parent-run"
+  }
+}

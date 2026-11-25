@@ -4,7 +4,7 @@
 The development image SHALL build Hyprland 0.57.2 from commit `11cbc6c577b84ffb1edf4df3fc5b6128c3ae6947`.
 
 #### Scenario: Hyprland commit does not match
-- **WHEN** the Hyprland source checked out during the build is not at its fixed commit
+- **WHEN** the build resolves the Hyprland version tag to a commit that differs from the pinned commit
 - **THEN** the build stops with an error that names Hyprland
 - **AND** no image is tagged
 
@@ -12,7 +12,7 @@ The development image SHALL build Hyprland 0.57.2 from commit `11cbc6c577b84ffb1
 The development image SHALL build Quickshell 0.3.2 from commit `4f508be500dea6e5732cc3d50382a0048b17e7b1`.
 
 #### Scenario: Quickshell commit does not match
-- **WHEN** the Quickshell source checked out during the build is not at its fixed commit
+- **WHEN** the build resolves the Quickshell version tag to a commit that differs from the pinned commit
 - **THEN** the build stops with an error that names Quickshell
 - **AND** no image is tagged
 
@@ -20,7 +20,7 @@ The development image SHALL build Quickshell 0.3.2 from commit `4f508be500dea6e5
 The development image SHALL build aquamarine 0.16.0 from commit `b77d67648336223a6c8fb88844ae316e7b72b574`.
 
 #### Scenario: aquamarine commit does not match
-- **WHEN** the aquamarine source checked out during the build is not at its fixed commit
+- **WHEN** the build resolves the aquamarine version tag to a commit that differs from the pinned commit
 - **THEN** the build stops with an error that names aquamarine
 - **AND** no image is tagged
 
@@ -28,7 +28,7 @@ The development image SHALL build aquamarine 0.16.0 from commit `b77d67648336223
 The development image SHALL build hyprutils 0.14.3 from commit `0d13d5a624eb093b600d1b2cbe448fb613c86424`.
 
 #### Scenario: hyprutils commit does not match
-- **WHEN** the hyprutils source checked out during the build is not at its fixed commit
+- **WHEN** the build resolves the hyprutils version tag to a commit that differs from the pinned commit
 - **THEN** the build stops with an error that names hyprutils
 - **AND** no image is tagged
 
@@ -36,7 +36,7 @@ The development image SHALL build hyprutils 0.14.3 from commit `0d13d5a624eb093b
 The development image SHALL build hyprgraphics 0.6.0 from commit `ade4ef0a887d2740efb9c9af2ddb175633365e1b`.
 
 #### Scenario: hyprgraphics commit does not match
-- **WHEN** the hyprgraphics source checked out during the build is not at its fixed commit
+- **WHEN** the build resolves the hyprgraphics version tag to a commit that differs from the pinned commit
 - **THEN** the build stops with an error that names hyprgraphics
 - **AND** no image is tagged
 
@@ -44,7 +44,7 @@ The development image SHALL build hyprgraphics 0.6.0 from commit `ade4ef0a887d27
 The development image SHALL build hyprland-protocols 0.8.0 from commit `044a434ec371f985655389bcef09286b1af3d77c`.
 
 #### Scenario: hyprland-protocols commit does not match
-- **WHEN** the hyprland-protocols source checked out during the build is not at its fixed commit
+- **WHEN** the build resolves the hyprland-protocols version tag to a commit that differs from the pinned commit
 - **THEN** the build stops with an error that names hyprland-protocols
 - **AND** no image is tagged
 
@@ -52,7 +52,7 @@ The development image SHALL build hyprland-protocols 0.8.0 from commit `044a434e
 The development image SHALL build hyprwire 0.3.1 from commit `3e6865ce5fd9237b58f5b2ce5de18814df3baff5`.
 
 #### Scenario: hyprwire commit does not match
-- **WHEN** the hyprwire source checked out during the build is not at its fixed commit
+- **WHEN** the build resolves the hyprwire version tag to a commit that differs from the pinned commit
 - **THEN** the build stops with an error that names hyprwire
 - **AND** no image is tagged
 
@@ -60,7 +60,7 @@ The development image SHALL build hyprwire 0.3.1 from commit `3e6865ce5fd9237b58
 The development image SHALL build cpptrace 1.0.4 from commit `3db8da80111171c219ab5839905771386bee06b3`.
 
 #### Scenario: cpptrace commit does not match
-- **WHEN** the cpptrace source checked out during the build is not at its fixed commit
+- **WHEN** the build resolves the cpptrace version tag to a commit that differs from the pinned commit
 - **THEN** the build stops with an error that names cpptrace
 - **AND** no image is tagged
 
@@ -68,7 +68,7 @@ The development image SHALL build cpptrace 1.0.4 from commit `3db8da80111171c219
 The development image SHALL build wayland 1.25.0 from commit `3e673a438b0a9749e3bdf5cac4befac86333024c`.
 
 #### Scenario: wayland commit does not match
-- **WHEN** the wayland source checked out during the build is not at its fixed commit
+- **WHEN** the build resolves the wayland version tag to a commit that differs from the pinned commit
 - **THEN** the build stops with an error that names wayland
 - **AND** no image is tagged
 
@@ -76,7 +76,7 @@ The development image SHALL build wayland 1.25.0 from commit `3e673a438b0a9749e3
 The development image SHALL build wayland-protocols 1.49 from commit `ee78491a237eaff9389a0ccf8680521d074407d3`.
 
 #### Scenario: wayland-protocols commit does not match
-- **WHEN** the wayland-protocols source checked out during the build is not at its fixed commit
+- **WHEN** the build resolves the wayland-protocols version tag to a commit that differs from the pinned commit
 - **THEN** the build stops with an error that names wayland-protocols
 - **AND** no image is tagged
 
@@ -104,9 +104,15 @@ It SHALL NOT replace or change the active host desktop session.
 - **AND** it shows the end of the Hyprland log
 
 ### Requirement: Start the fixture window
-One documented command SHALL start the minimal Quickshell fixture inside the nested Hyprland.
+The normal start command SHALL start the minimal Quickshell fixture inside the nested Hyprland,
+right after the nested Hyprland starts. No separate step is needed.
+A documented fixture command SHALL also start it on its own.
 The fixture window SHALL be titled `phosphor-dev-fixture`.
 It SHALL show a network line and a sound line.
+
+#### Scenario: Fixture starts with the normal start
+- **WHEN** the developer runs the start command
+- **THEN** after the nested Hyprland starts, a window titled `phosphor-dev-fixture` appears inside it
 
 #### Scenario: Fixture starts
 - **WHEN** the developer runs the fixture command while the nested session runs
@@ -170,24 +176,47 @@ The container SHALL NOT run its own NetworkManager, PipeWire or D-Bus daemon.
 - **THEN** no NetworkManager, PipeWire or D-Bus daemon process runs inside the container
 
 ### Requirement: Secrets stay out of the image and the repo
-API keys for OpenCode SHALL reach the container only at start time.
-The start command SHALL pass only keys already set in the host environment.
-They SHALL NOT be written to any file or to the image.
+The start command SHALL read the OpenCode API keys `OPENROUTER_API_KEY` and
+`GITHUB_PERSONAL_ACCESS_TOKEN` from the host keyring, by name.
+The lookup names MAY be in the repo; the key values SHALL NOT.
+The keys SHALL NOT be written to any file or to the image.
+
+#### Scenario: No key values in the repo
+- **WHEN** the repo, including `dev/`, is searched for key values
+- **THEN** none is found
+
+### Requirement: Keys reach only the final shell
+The start command SHALL pass the keys only to the shells it opens in the container
+(the final shell, or the shell opened with `--shell`).
+The keys SHALL NOT be in the container definition (`dev/devcontainer.json`)
+or in the container's environment at creation.
+The start command SHALL NOT print key values.
 
 #### Scenario: Keys present
-- **WHEN** the keys are set in the host environment and the start command runs
-- **THEN** OpenCode inside the container can read them
+- **WHEN** both keys are found in the host keyring and the start command runs
+- **THEN** OpenCode started from the final shell can read them
+- **AND** no key value appears in the command output
+
+#### Scenario: Later shell
+- **WHEN** a new shell is opened in the container after start, not by the start command
+- **THEN** it does not have the keys
 
 #### Scenario: Keys missing
-- **WHEN** a key is not set
+- **WHEN** a key is not found in the host keyring
 - **THEN** the start command warns and the session still starts
 
-### Requirement: OpenCode editor extension
-The dev container SHALL list the extension `sst-dev.opencode` for VS Code and VSCodium clients.
+### Requirement: Shell with keys on demand
+The host script SHALL open a shell with the keys without starting anything when given `--shell`.
 
-#### Scenario: Open from VSCodium
-- **WHEN** the user opens the dev container from VSCodium
-- **THEN** the extension `sst-dev.opencode` is installed and active in the container
+#### Scenario: Container running
+- **WHEN** the container is running and the developer runs the start command with `--shell`
+- **THEN** a shell opens in the container with both keys
+- **AND** no key value is printed
+
+#### Scenario: Container not running
+- **WHEN** the container is not running and the developer runs the start command with `--shell`
+- **THEN** it prints an error and exits non-zero
+- **AND** nothing is started
 
 ### Requirement: Development guide
 `docs/development.md` SHALL record the host prerequisites, build, start, fixture,

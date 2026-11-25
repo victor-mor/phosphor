@@ -3,7 +3,7 @@ A simple quickshell UI for hyprland
 
 ## Status
 
-Planning and project setup only; no UI source, launch environment or tests are implemented yet.
+Development environment implementation is in progress; no product UI or tests are implemented yet.
 
 ## Project documentation
 

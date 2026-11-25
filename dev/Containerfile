@@ -1,0 +1,76 @@
+FROM docker.io/library/ubuntu:26.04
+
+ARG SOURCE_HYPRLAND="Hyprland 0.57.2 https://github.com/hyprwm/Hyprland.git 11cbc6c577b84ffb1edf4df3fc5b6128c3ae6947"
+ARG SOURCE_QUICKSHELL="quickshell 0.3.2 https://github.com/quickshell-mirror/quickshell.git 4f508be500dea6e5732cc3d50382a0048b17e7b1"
+ARG SOURCE_AQUAMARINE="aquamarine 0.16.0 https://github.com/hyprwm/aquamarine.git b77d67648336223a6c8fb88844ae316e7b72b574"
+ARG SOURCE_HYPRUTILS="hyprutils 0.14.3 https://github.com/hyprwm/hyprutils.git 0d13d5a624eb093b600d1b2cbe448fb613c86424"
+ARG SOURCE_HYPRGRAPHICS="hyprgraphics 0.6.0 https://github.com/hyprwm/hyprgraphics.git ade4ef0a887d2740efb9c9af2ddb175633365e1b"
+ARG SOURCE_HYPRLAND_PROTOCOLS="hyprland-protocols 0.8.0 https://github.com/hyprwm/hyprland-protocols.git 044a434ec371f985655389bcef09286b1af3d77c"
+ARG SOURCE_HYPRWIRE="hyprwire 0.3.1 https://github.com/hyprwm/hyprwire.git 3e6865ce5fd9237b58f5b2ce5de18814df3baff5"
+ARG SOURCE_CPPTRACE="cpptrace 1.0.4 https://github.com/jeremy-rifkin/cpptrace.git 3db8da80111171c219ab5839905771386bee06b3"
+ARG SOURCE_WAYLAND="wayland 1.25.0 https://gitlab.freedesktop.org/wayland/wayland.git 3e673a438b0a9749e3bdf5cac4befac86333024c"
+ARG SOURCE_WAYLAND_PROTOCOLS="wayland-protocols 1.49 https://gitlab.freedesktop.org/wayland/wayland-protocols.git ee78491a237eaff9389a0ccf8680521d074407d3"
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y \
+    build-essential cmake ninja-build meson pkgconf python3 git curl ca-certificates \
+    libpugixml-dev libxcb-xfixes0-dev libwayland-dev wayland-protocols \
+    libxkbcommon-dev libinput-dev libdrm-dev libpixman-1-dev libseat-dev \
+    libdisplay-info-dev hwdata libudev-dev libegl-dev libgles-dev libgbm-dev \
+    libcairo2-dev libpango1.0-dev libjpeg-dev libwebp-dev libmagic-dev libpng-dev \
+    librsvg2-dev libhyprlang-dev libhyprcursor-dev hyprwayland-scanner \
+    liblua5.5-dev glslang-dev glslang-tools libglaze-dev libeis-dev \
+    libcanberra-dev libxcursor-dev libre2-dev libmuparser-dev liblcms2-dev \
+    libudis86-dev uuid-dev qt6-base-dev qt6-base-private-dev qt6-declarative-dev \
+    qt6-declarative-private-dev qt6-wayland-dev qt6-wayland-private-dev \
+    qt6-shadertools-dev libcli11-dev libjemalloc-dev spirv-tools \
+    libpipewire-0.3-dev libpam0g-dev libpolkit-agent-1-dev libpolkit-gobject-1-dev \
+    libglib2.0-dev libvulkan-dev libxcb1-dev libunwind-dev libdwarf-dev \
+    qml6-module-qtquick qml6-module-qtqml-workerscript qt6-wayland \
+    g++-16 libstdc++-16-dev network-manager wireplumber pulseaudio-utils tini
+ENV CC=gcc-16 CXX=g++-16
+ENV PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig
+ENV LD_LIBRARY_PATH=/usr/local/lib
+ENV PATH=/usr/local/bin:${PATH}
+WORKDIR /source
+RUN set -eu; \
+    for pin in "$SOURCE_HYPRLAND" "$SOURCE_QUICKSHELL" "$SOURCE_AQUAMARINE" \
+        "$SOURCE_HYPRUTILS" "$SOURCE_HYPRGRAPHICS" "$SOURCE_HYPRLAND_PROTOCOLS" \
+        "$SOURCE_HYPRWIRE" "$SOURCE_CPPTRACE" "$SOURCE_WAYLAND" "$SOURCE_WAYLAND_PROTOCOLS"; do \
+        set -- $pin; name=$1; version=$2; url=$3; commit=$4; \
+        case "$name" in \
+            Hyprland) tag=v0.57.2 ;; quickshell) tag=v0.3.2 ;; \
+            aquamarine) tag=v0.16.0 ;; hyprutils) tag=v0.14.3 ;; \
+            hyprgraphics) tag=v0.6.0 ;; hyprland-protocols) tag=v0.8.0 ;; \
+            hyprwire) tag=v0.3.1 ;; cpptrace) tag=v1.0.4 ;; \
+            wayland) tag=1.25.0 ;; wayland-protocols) tag=1.49 ;; \
+            *) echo "Unknown source: $name" >&2; exit 1 ;; \
+        esac; \
+        if ! git clone --branch "$tag" --single-branch "$url" "$name"; then \
+            echo "Source clone failed: $name ($tag)" >&2; exit 1; \
+        fi; \
+        resolved=$(git -C "$name" rev-parse 'HEAD^{commit}'); \
+        if [ "$resolved" != "$commit" ]; then \
+            echo "Source mismatch: $name (expected $commit, got $resolved)" >&2; exit 1; \
+        fi; \
+    done; \
+    git -C Hyprland submodule update --init --recursive
+RUN meson setup wayland/build wayland --prefix=/usr/local --libdir=lib -Ddocumentation=false -Dtests=false && \
+    meson compile -C wayland/build && meson install -C wayland/build && \
+    meson setup wayland-protocols/build wayland-protocols --prefix=/usr/local && \
+    meson install -C wayland-protocols/build
+RUN set -eu; for source in hyprutils hyprwire hyprland-protocols hyprgraphics aquamarine; do \
+    cmake -S "$source" -B "$source/build" -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local; \
+    cmake --build "$source/build" -j8; cmake --install "$source/build"; done
+RUN cmake -S cpptrace -B cpptrace/build -GNinja -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr/local -DCPPTRACE_GET_SYMBOLS_WITH_ADDR2LINE=ON \
+    -DCPPTRACE_UNWIND_WITH_LIBUNWIND=ON && cmake --build cpptrace/build -j8 && cmake --install cpptrace/build
+RUN cmake -S quickshell -B quickshell/build -GNinja -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr/local -DSCREENCOPY=OFF -DX11=OFF -DI3=OFF && \
+    cmake --build quickshell/build -j8 && cmake --install quickshell/build
+RUN cmake -S Hyprland -B Hyprland/build -GNinja -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr/local -DNO_XWAYLAND=ON -DNO_SYSTEMD=ON -DNO_HYPRPM=ON && \
+    cmake --build Hyprland/build -j8 && cmake --install Hyprland/build
+RUN curl -fsSL https://opencode.ai/v2/install | bash -s -- --no-modify-path && \
+    install -m 755 /root/.opencode/bin/opencode /usr/local/bin/opencode
+CMD ["tini", "--", "sleep", "infinity"]
