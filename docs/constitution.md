@@ -5,7 +5,8 @@ Approved product principles and constraints. These apply to specifications and i
 ## Technical foundation
 - Phosphor is a Quickshell (Qt Quick/QML) UI for Hyprland.
 - Changes must remain compatible with the MIT license in `LICENSE`.
-- Project-owned variables, IDs and functions use snake_case where QML permits it; external APIs and QML type/component naming requirements take precedence.
+- QML/Qt properties, signals, methods and IDs use camelCase.
+- QML/Qt types and files names of components use PascalCase.
 
 ## Architectural responsibilities
 - `shell.qml`: intended entrypoint for shell composition and startup.

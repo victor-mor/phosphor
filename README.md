@@ -3,12 +3,12 @@ A simple quickshell UI for hyprland
 
 ## Status
 
-Planning and project setup only; no UI source, launch environment or tests are implemented yet.
+Development environment implementation is in progress; no product UI or tests are implemented yet.
 
 ## Project documentation
 
 - [Product principles and constraints](docs/constitution.md)
-- [Development, execution and verification](docs/development.md)
+- [Development environment](docs/development.md)
 - [Contribution conventions](CONTRIBUTING.md)
 - [Agent instructions and SDD workflow](AGENTS.md)
 
@@ -16,7 +16,8 @@ Planning and project setup only; no UI source, launch environment or tests are i
 
 OpenSpec 2.0.0 is installed and initialized for OpenCode. `openspec/specs/` holds
 capability contracts and `openspec/changes/` holds active changes and their archive.
-No capability specifications or changes exist yet.
+The dev environment change is in `openspec/changes/add-dev-environment`.
+Specifications for product capabilities do not exist yet.
 
 All changes use the packaged `spec-driven` schema. Each change starts with an investigation.
 Small, clearly bounded work may skip it, with user approval.
