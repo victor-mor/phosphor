@@ -64,9 +64,10 @@ Each check gives the expected result. Write the observed result next to it.
   start Quickshell on the nested display; log to `/tmp/phosphor-dev/logs/quickshell.log`.
 - [x] 3.3 [user, host][manual] Run `start-fixture.sh` in the container,
   or check after `start-dev.sh` (it starts the fixture).
-  Expected: fixture window inside the nested Hyprland, with host network devices and default sink.
+  Expected: fixture window titled `phosphor-dev-fixture` appears inside the nested Hyprland.
   Observed: fixture window visible in the nested session, with the network and sound lines (user report).
   With the session running, the user ran `pkill -KILL -x quickshell` in the container; the fixture disappeared. Then `bash /workspace/dev/scripts/start-fixture.sh` reported "Fixture started" and the fixture window reappeared (user report).
+  Note: the network and sound lines (host network devices and default sink) are extra fixture content, not part of the expected result.
 - [x] 3.4 [user, host] Run `start-fixture.sh` with no session.
   Expected: error "session not running". Observed: after `stop-session.sh` reported "Nested session stopped", the user ran `bash dev/scripts/start-fixture.sh` in the container; output: "Session not running" (user report; matches expected). With the session stopped, `bash /workspace/dev/scripts/start-fixture.sh` also printed "Session not running" (user report).
 
