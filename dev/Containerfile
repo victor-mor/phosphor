@@ -39,13 +39,11 @@ RUN set -eu; \
         "$SOURCE_HYPRWIRE" "$SOURCE_CPPTRACE" "$SOURCE_WAYLAND" "$SOURCE_WAYLAND_PROTOCOLS"; do \
         set -- $pin; name=$1; version=$2; url=$3; commit=$4; \
         case "$name" in \
-            Hyprland) tag=v0.57.2 ;; quickshell) tag=v0.3.2 ;; \
-            aquamarine) tag=v0.16.0 ;; hyprutils) tag=v0.14.3 ;; \
-            hyprgraphics) tag=v0.6.0 ;; hyprland-protocols) tag=v0.8.0 ;; \
-            hyprwire) tag=v0.3.1 ;; cpptrace) tag=v1.0.4 ;; \
-            wayland) tag=1.25.0 ;; wayland-protocols) tag=1.49 ;; \
+            Hyprland|quickshell|aquamarine|hyprutils|hyprgraphics|hyprland-protocols|hyprwire|cpptrace) prefix=v ;; \
+            wayland|wayland-protocols) prefix= ;; \
             *) echo "Unknown source: $name" >&2; exit 1 ;; \
         esac; \
+        tag="${prefix}${version}"; \
         if ! git clone --branch "$tag" --single-branch "$url" "$name"; then \
             echo "Source clone failed: $name ($tag)" >&2; exit 1; \
         fi; \

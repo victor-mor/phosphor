@@ -1,52 +1,64 @@
 # Development environment
 
-## Host prerequisites
+See [OpenSpec](../openspec/) and the [verification practice](../AGENTS.md#8-evidence-and-memory).
 
-The verified host is NixOS 26.05. Use rootless Podman, devcontainer CLI 0.87.0,
-secret-tool with a Linux keyring, and a Wayland desktop. The keyring lookup names
-are `service openrouter` and `service github-mcp`. The build needs network access
-and several GB of image storage. Run host commands from the repository root.
+## What you need
 
-## Build
+The verified host is NixOS 26.05. You need rootless Podman, devcontainer CLI
+0.87.0, secret-tool with a Linux keyring, and a Wayland desktop. The keyring
+lookup names are `service openrouter` and `service github-mcp`. The build needs
+network access and several GB of image storage. Run host commands from the
+repository root.
 
-[user, host] Run `bash dev/scripts/build-image.sh`. The image is tagged
-`localhost/phosphor-devcontainer:latest`. A source mismatch stops the build and
-names the source.
+## Build the image
 
-## Start and fixture
+[user, host] Run `bash dev/scripts/build-image.sh` [tested: 1.5]. The image is
+tagged `localhost/phosphor-devcontainer:latest`. A source mismatch stops the
+build and names the source.
 
-[user, host] Run `bash dev/scripts/start-dev.sh`. It starts the container, nested
-session and fixture, then opens a final shell. Keys are available only in that
-shell or another shell opened by this script, not in other shells.
+## Start the dev environment
+
+[user, host] Run `bash dev/scripts/start-dev.sh` [tested: 2.4]. It starts the
+container, nested session and fixture. Then it opens a final shell. Keys are
+available only in that shell or another shell opened by this script, not in
+other shells.
 
 [user, host] With the container running, run `bash dev/scripts/start-dev.sh --shell`
-to open another shell with the keys without starting a session. If the container
-is stopped, it reports an error and exits with code 1.
+[tested: 2.9, 2.10]. It opens another shell with the keys without starting a
+session. If the container is stopped, it reports an error and exits with code 1.
 
 [manual] The fixture appears in the nested session with network and sound lines.
 [user, container] Run `bash /workspace/dev/scripts/start-fixture.sh` to start the
-fixture separately. With no session running, it reports `Session not running`.
+fixture separately [tested: 3.3, 3.4]. It starts the fixture when the session is
+running. With no session, it reports `Session not running`.
 
-## Check
+## Check the session
 
-[user, container] Run `bash /workspace/dev/scripts/check-session.sh`. With the
-fixture open, the user observed OK for wpctl, pactl, nmcli and the fixture
-window, with exit 0. With the fixture closed, the fixture check failed and the
-command exited 1. The audio checks show that the servers answer, not that sound
-is heard.
+[user, container] Run `bash /workspace/dev/scripts/check-session.sh` [tested:
+4.2, 4.3]. With the fixture open, the user observed OK for wpctl, pactl, nmcli
+and the fixture window, with exit 0. With the fixture closed, the fixture check
+failed and the command exited 1. The audio checks show that the servers answer,
+not that sound is heard.
 
 [manual] The user played a test sound in the container and heard it on the host.
 
-## Stop and logs
+## Stop the session
 
-[user, container] Run `bash /workspace/dev/scripts/stop-session.sh`.
-The user verified exit 0, no session processes, removal of the session folder,
-and retained logs in `/tmp/phosphor-dev/logs`.
+[user, container] Run `bash /workspace/dev/scripts/stop-session.sh` [tested:
+5.2]. The user verified exit 0, no session processes, removal of the session
+folder, and retained logs in `/tmp/phosphor-dev/logs`.
+
+This stops only the nested session, not the container.
+[not tested yet, host] Use the container name from `podman ps`, then run
+`podman stop <container>` followed by `podman rm <container>`.
+
+## Logs
 
 The logs inside the container are `/tmp/phosphor-dev/logs/hyprland.log` and
 `/tmp/phosphor-dev/logs/quickshell.log`.
+Investigate WARNING, ERROR and CRITICAL logs.
 
-## Limitations
+## Known limitations
 
 - Hyprland's exit dispatch fails with the Lua config.
 - Waybar disappeared once on the host during a stop; the cause is unknown.

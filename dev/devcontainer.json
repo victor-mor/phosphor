@@ -1,6 +1,7 @@
 {
   "name": "Phosphor development",
   "image": "localhost/phosphor-devcontainer",
+  "overrideCommand": false,
   "workspaceFolder": "/workspace",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
   "remoteUser": "root",

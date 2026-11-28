@@ -16,14 +16,14 @@ Each check gives the expected result. Write the observed result next to it.
 - [x] 1.4 [agent] Check: `bash -n dev/scripts/build-image.sh`.
   Expected: no output, exit 0.
 - [x] 1.5 [user, host] Run the build command.
-  Expected: image tagged. Observed: image 5ddc835367d0d5006040a9ecf9e97c54c60d1980f1dfcb3c3598b897bd923031, tag localhost/phosphor-devcontainer:latest (user report).
+  Expected: image tagged. Observed: `bash dev/scripts/build-image.sh` built image 5ddc835367d0d5006040a9ecf9e97c54c60d1980f1dfcb3c3598b897bd923031, tag localhost/phosphor-devcontainer:latest (user report).
 - [x] 1.6 [user, host] Mismatch test: in a copy of `dev/Containerfile`, change one pinned commit
   to a different commit, then build from that copy.
-  Expected: build stops and names the source; no image tagged. Observed: "Source mismatch: quickshell (expected 9b0f339b19057f4731bf3b48293307d7ef241671, got 4f508be500dea6e5732cc3d50382a0048b17e7b1)". No new tag; latest unchanged. Dangling image 9d32ac9d7525 left from the failed build (user to remove).
+  Expected: build stops and names the source; no image tagged. Observed: "Source mismatch: quickshell (expected 9b0f339b19057f4731bf3b48293307d7ef241671, got 4f508be500dea6e5732cc3d50382a0048b17e7b1)". No new tag; latest unchanged. Dangling image 9d32ac9d7525 left from the failed build (user to remove). Rebuilt image: user reports the build stopped; exact message pending.
 - [x] 1.7 [user, host] In the image, print the versions of Hyprland and Quickshell.
-  Expected: 0.57.2 and 0.3.2. Observed: Hyprland 0.57.2, commit 11cbc6c577b84ffb1edf4df3fc5b6128c3ae6947, tag v0.57.2; hyprgraphics 0.6.0, hyprutils 0.14.3, aquamarine 0.16.0 match. Quickshell 0.3.2, revision 4f508be500dea6e5732cc3d50382a0048b17e7b1. Note: Hyprland reported "dirty" build tree; not explained.
+  Expected: 0.57.2 and 0.3.2. Observed: Hyprland 0.57.2, commit 11cbc6c577b84ffb1edf4df3fc5b6128c3ae6947, tag v0.57.2; hyprgraphics 0.6.0, hyprutils 0.14.3, aquamarine 0.16.0 match. Quickshell 0.3.2, revision 4f508be500dea6e5732cc3d50382a0048b17e7b1. Note: Hyprland reported "dirty" build tree; not explained. Rebuilt image, container 1e984f73a068: `hyprland --version` and `quickshell --version` reported the same versions, commit, tag, dependencies and revision as the previous image (user report).
 - [x] 1.8 [user, host] In the image, run OpenCode and print its version.
-  Expected: OpenCode runs and prints a version. Observed: opencode v2.4.1 prints its version.
+  Expected: OpenCode runs and prints a version. Observed: opencode v2.4.1 prints its version. Rebuilt image, container 1e984f73a068: `opencode --version` reported v2.4.2 (user report). OpenCode is installed without a version pin (R11), so the version changed between builds.
 
 ## 2. Container start and nested Hyprland
 
@@ -66,8 +66,9 @@ Each check gives the expected result. Write the observed result next to it.
   or check after `start-dev.sh` (it starts the fixture).
   Expected: fixture window inside the nested Hyprland, with host network devices and default sink.
   Observed: fixture window visible in the nested session, with the network and sound lines (user report).
+  With the session running, the user ran `pkill -KILL -x quickshell` in the container; the fixture disappeared. Then `bash /workspace/dev/scripts/start-fixture.sh` reported "Fixture started" and the fixture window reappeared (user report).
 - [x] 3.4 [user, host] Run `start-fixture.sh` with no session.
-  Expected: error "session not running". Observed: after `stop-session.sh` reported "Nested session stopped", the user ran `bash dev/scripts/start-fixture.sh` in the container; output: "Session not running" (user report; matches expected).
+  Expected: error "session not running". Observed: after `stop-session.sh` reported "Nested session stopped", the user ran `bash dev/scripts/start-fixture.sh` in the container; output: "Session not running" (user report; matches expected). With the session stopped, `bash /workspace/dev/scripts/start-fixture.sh` also printed "Session not running" (user report).
 
 ## 4. Check
 
@@ -92,7 +93,7 @@ Each check gives the expected result. Write the observed result next to it.
 - [x] 5.2 [user, host][manual] Run it with the session and fixture running. Watch the host bar.
   Expected: exit 0; no `start-hyprland`, `Hyprland` or `quickshell` process (`pgrep`);
   `/tmp/phosphor-dev/xdg` gone; logs still in `/tmp/phosphor-dev/logs`;
-  nested window closed; host bar still visible. Observed: `bash dev/scripts/stop-session.sh` printed "Nested session stopped" and exited 0 (`echo $?`); `pgrep -a Hyprland` and `pgrep -a quickshell` had no output; `ls -d /tmp/phosphor-dev/xdg` reported "No such file or directory"; `ls /tmp/phosphor-dev/logs` showed `hyprland.log` and `quickshell.log`; the nested window disappeared and everything on the host stayed visible (user report). The `start-hyprland` process check was missing before; the user then ran `bash dev/scripts/stop-session.sh` (output "Nested session stopped") and `pgrep -a start-hyprland; echo $?` printed 1 (no process).
+  nested window closed; host bar still visible. Observed: `bash dev/scripts/stop-session.sh` printed "Nested session stopped" and exited 0 (`echo $?`); `pgrep -a Hyprland` and `pgrep -a quickshell` had no output; `ls -d /tmp/phosphor-dev/xdg` reported "No such file or directory"; `ls /tmp/phosphor-dev/logs` showed `hyprland.log` and `quickshell.log`; the nested window disappeared and everything on the host stayed visible (user report). The user also tested the absolute form `bash /workspace/dev/scripts/stop-session.sh`. The `start-hyprland` process check was missing before; the user then ran `bash dev/scripts/stop-session.sh` (output "Nested session stopped") and `pgrep -a start-hyprland; echo $?` printed 1 (no process).
 - [x] 5.3 [user, host] Start again after the stop.
   Expected: session starts normally. Observed: after stop-session.sh (which printed 'Nested session stopped' and was followed by `pgrep -a start-hyprland; echo $?` returning 1), the user ran start-dev.sh. Current session: `pgrep -a start-hyprland` shows PID 3975; `pgrep -a Hyprland` shows PIDs 3981 and 3986. Start-dev exit code not reported. PPID of 3986 not checked. (user report)
 
@@ -130,5 +131,4 @@ Each check gives the expected result. Write the observed result next to it.
 ## 8. Final check
 
 - [x] 8.1 [agent] Run `openspec validate add-dev-environment`. Expected: valid.
-- [ ] 8.2 [agent] `git status`: only `dev/`, `docs/development.md`, `README.md` and this change changed.
-  Expected: no unrelated files.
+- [x] 8.2 [agent] Check that each commit of this change contains only its approved files: `git show --stat` for the commits of feature/dev-environment created for this change. Expected: each listed commit touches only its approved files; no commit includes MEMORY.md or opencode.json. Observed: Each commit matches its approved list: 157a257 (agent files + AGENTS.md), 481a12b (change files), c4b3e50 (dev/, docs/development.md, README.md, change folder), e58495d (sdd-coordinator.md, sdd-planner.md). No commit includes MEMORY.md or opencode.json.
